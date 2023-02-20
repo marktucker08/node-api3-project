@@ -22,12 +22,18 @@ async function validateUserId(req, res, next) {
     }
   }
   catch(err) {
-    res.status(500).json({ error: err.message })
+    res.status(500).json({ message: "something bad happened" })
   }
 }
 
 function validateUser(req, res, next) {
   // DO YOUR MAGIC
+  const { name } = req.body
+  if ( name !== undefined && typeof name === 'string' && name.length && name.trim().length > 0 ) {
+    next()
+  } else {
+    res.status(400).json({ message: "missing required name field" })
+  }
 }
 
 function validatePost(req, res, next) {
@@ -38,4 +44,5 @@ function validatePost(req, res, next) {
 module.exports = {
   logger,
   validateUserId,
+  validateUser,
 }
