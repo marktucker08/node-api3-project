@@ -37,15 +37,29 @@ router.post('/', validateUser, (req, res) => {
   })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, (req, res) => {
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  User.update(req.params.id, req.body)
+  .then(updated => {
+    res.status(200).json(updated)
+  })
+  .catch(err => {
+    res.status(500).json({ message: "something bad happened" })
+  })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, (req, res) => {
   // RETURN THE FRESHLY DELETED USER OBJECT
   // this needs a middleware to verify user id
+  User.remove(req.params.id)
+  .then(deleted => {
+    res.status(200).json(deleted)
+  })
+  .catch(err => {
+    res.status(500).json({ message: "something bad happened" })
+  })
 });
 
 router.get('/:id/posts', (req, res) => {
